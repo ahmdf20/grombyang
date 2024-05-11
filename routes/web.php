@@ -20,6 +20,8 @@ Route::controller(FrontController::class)->group(function () {
 
     Route::put('/my/profile/update', 'update')->name('profile.update');
     Route::put('/my/profile/update-password', 'update_password')->name('profile.update-password');
+
+    Route::get('/send-email', 'send_email')->name('send-email');
 });
 
 Route::controller(AuthController::class)->group(function () {
@@ -30,6 +32,8 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/registration', 'registration')->name('registration');
 
     Route::get('/logout', 'logout')->name('logout');
+
+    Route::get('/register/email-verification/{id}/{token}/{method}', 'email_verification')->name('email-verification');
 });
 
 Route::controller(DashboardController::class)->group(function () {
@@ -64,11 +68,11 @@ Route::controller(CategoryController::class)->group(function () {
     Route::delete('/category/delete/{uuid}', 'delete')->name('category.delete');
 });
 
-Route::controller(OrderController::class)->group(function () {
+Route::controller(OrderController::class)->middleware('authorization:seller')->group(function () {
     Route::get('/order', 'index')->name('order.index');
 });
 
-Route::controller(AdminController::class)->group(function () {
+Route::controller(AdminController::class)->middleware('authorization:super-admin')->group(function () {
     Route::get('/admin', 'index')->name('admin.index');
     Route::get('/admin/add', 'add')->name('admin.add');
     Route::get('/admin/edit/{uuid}', 'edit')->name('admin.edit');

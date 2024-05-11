@@ -114,6 +114,7 @@ class ProductController extends Controller
             'name' => 'required',
             'price' => 'required|numeric',
             'upload' => 'mimes:png,jpg,jpeg|max:5242',
+            'categories' => 'required',
             'description' => 'required',
             'stock' => 'required',
             'weight' => 'required'
@@ -123,6 +124,16 @@ class ProductController extends Controller
         if ($request->file('upload')) {
             $upload = "storage/" . $request->file('upload')->store('products');
         }
+
+        DB::table('products_categories')->where('product_id', $product->id)->delete();
+        foreach ($request->categories as $categories) {
+            DB::table('products_categories')->insert([
+                'product_id' => $product->id,
+                'category_id' => $categories,
+                'created_at' => now()
+            ]);
+        }
+
         Product::where('uuid', $uuid)->update([
             'slug' => Str::slug($request->name),
             'name' => $request->name,

@@ -29,7 +29,7 @@ class SubMenusSeeder extends Seeder
                 'slug' => 'product',
                 'icon' => '<i class="fa-solid fa-cube"></i>',
                 'url' => 'product.index',
-                'access' => 'seller,admin,super-admin',
+                'access' => 'seller',
                 'status' => 'active',
             ],
             [

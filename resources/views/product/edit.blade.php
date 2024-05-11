@@ -169,6 +169,35 @@
                                     </div>
                                 </div>
 
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Categories</label>
+                                        <ul class="custom-control-group g-3 align-center">
+                                            @foreach ($categories as $key => $category)
+                                            <li>
+                                                <div class="custom-control custom-control-sm custom-checkbox">
+                                                    <input
+                                                        type="checkbox"
+                                                        class="custom-control-input"
+                                                        id="categories[{{ $key }}]"
+                                                        name="categories[{{ $key }}]"
+                                                        value="{{ $category->id }}"
+                                                        {{ $product->categories->contains($category->id) ? 'checked' : '' }}
+                                                    >
+                                                    <label
+                                                        class="custom-control-label"
+                                                        for="categories[{{ $key }}]"
+                                                    >{{ $category->name }}</label>
+                                                </div>
+                                            </li>
+                                            @endforeach
+                                        </ul>
+                                        @error('categories')
+                                        <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+                                </div>
+
                                 <div class="nk-block nk-block-lg">
                                     <label class="form-label">Description</label>
                                     <div class="card card-bordered">

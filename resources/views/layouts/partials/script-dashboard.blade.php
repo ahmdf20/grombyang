@@ -1,12 +1,13 @@
-@if (Session::get('text'))
+@if (session()->has('text'))
 <script>
     Swal.fire({
-        title: `{{ Session::get('title') }}`,
-        icon: `{{ Session::get('icon') }}`,
-        text: `{{ Session::get('text') }}`,
+        title: `{{ session()->get('title') }}`,
+        icon: `{{ session()->get('icon') }}`,
+        text: `{{ session()->get('text') }}`,
     })
 </script>
 @endif
+
 
 <script>
     function handleLogout() {

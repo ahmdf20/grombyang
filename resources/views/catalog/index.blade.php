@@ -18,7 +18,7 @@
                 <div class="col-xl-3 col-lg-4 col-sm-6 col-12">
                     <div class="axil-product product-style-eight">
                         <div class="thumbnail">
-                            <a href="single-product-8.html">
+                            <a href="#">
                                 <img
                                     data-sal="zoom-out"
                                     data-sal-delay="100"
@@ -27,6 +27,7 @@
                                     class="main-img"
                                     src="{{ asset($product->image) }}"
                                     alt="Product Images"
+                                    style="object-fit: cover; height: 25rem;"
                                 >
                             </a>
                             {{-- <div class="label-block label-left">

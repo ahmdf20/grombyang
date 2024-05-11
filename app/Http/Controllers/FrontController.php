@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\Register;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class FrontController extends Controller
 {
@@ -71,5 +73,11 @@ class FrontController extends Controller
             'icon' => 'success',
             'text' => 'Password has been changed!'
         ]);
+    }
+
+    public function send_email()
+    {
+        Mail::to('ahmadfadilah202003@gmail.com')->send(new Register());
+        return "Berhasil";
     }
 }
