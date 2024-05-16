@@ -26,20 +26,29 @@
             <i class="fa-solid fa-magnifying-glass"></i>
         </a>
     </li>
+    @auth
     <li class="shopping-cart">
         <a
-            href="#"
-            class="cart-dropdown-btn"
+            href="{{ route('my-order') }}"
+            class=""
         >
-            <span class="cart-count">2</span>
+            <i class="fa-solid fa-basket-shopping"></i>
+        </a>
+    </li>
+    <li class="shopping-cart">
+        <a
+            href="{{ route('cart.index') }}"
+            class=""
+        >
             <i class="fa-solid fa-cart-shopping"></i>
         </a>
     </li>
     <li class="wishlist">
-        <a href="wishlist.html">
+        <a href="{{ route('wishlist.index') }}">
             <i class="fa-solid fa-heart"></i>
         </a>
     </li>
+    @endauth
     <li class="my-account">
         <a href="javascript:void(0)">
             <i class="fa-solid fa-user"></i>

@@ -31,7 +31,7 @@
 
     @if (!in_array(request()->route()->getName(), ['login', 'register']))
     @include('layouts.partials.footer-app')
-    <x-modal-app />
+    {{-- <x-modal-app /> --}}
     @endif
 
     @include('layouts.partials.script-app')

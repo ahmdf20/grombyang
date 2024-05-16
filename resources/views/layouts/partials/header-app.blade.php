@@ -28,7 +28,7 @@
             <div class="header-navbar">
                 <div class="header-brand">
                     <a
-                        href="index.html"
+                        href="{{ route('catalog') }}"
                         class="logo logo-dark"
                     >
                         <img
@@ -37,7 +37,7 @@
                         >
                     </a>
                     <a
-                        href="index.html"
+                        href="{{ route('catalog') }}"
                         class="logo logo-light"
                     >
                         <img

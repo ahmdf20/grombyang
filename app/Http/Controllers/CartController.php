@@ -3,63 +3,63 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\Product;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): View
     {
-        //
+        return view('cart.index', [
+            'title' => 'Grombyang | My Cart',
+            'carts' => Cart::where([
+                ['user_id', auth()->user()->id],
+                ['deleted_at', null]
+            ])->get()->all()
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(Request $request, Product $product)
     {
-        //
+        $session = [];
+        if ($product->cart()->where('user_id', auth()->user()->id)->exists()) {
+            $cart = Cart::where([
+                ['product_id', $product->id],
+                ['user_id', auth()->user()->id]
+            ])->first();
+            $cart->qty += $request->qty ? $request->qty : 1;
+            $cart->save();
+            $session = [
+                'title' => 'Add to Cart',
+                'icon' => 'success',
+                'text' => 'Successfuly added the product to cart!'
+            ];
+        } else {
+            Cart::insert([
+                'uuid' => uuid_create(),
+                'product_id' => $product->id,
+                'user_id' => auth()->user()->id,
+                'created_at' => now(),
+                'qty' => 1,
+            ]);
+            $session = [
+                'title' => 'Add to Cart',
+                'icon' => 'success',
+                'text' => 'Successfuly added the product to cart!'
+            ];
+        }
+
+        return response()->json($session);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function delete($uuid)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Cart $cart)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Cart $cart)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Cart $cart)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Cart $cart)
-    {
-        //
+        Cart::where('uuid', $uuid)->delete();
+        return response()->json([
+            'title' => 'Delete Item',
+            'icon' => 'success',
+            'text' => 'Successfulya deleted item in your cart!'
+        ]);
     }
 }

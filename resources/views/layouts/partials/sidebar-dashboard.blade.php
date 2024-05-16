@@ -7,7 +7,7 @@
     <div class="nk-sidebar-element nk-sidebar-head">
         <div class="nk-sidebar-brand">
             <a
-                href="html/index.html"
+                href="{{ route('catalog') }}"
                 class="logo-link nk-sidebar-logo"
             >
                 <img

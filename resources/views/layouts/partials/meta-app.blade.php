@@ -94,3 +94,9 @@
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
 ></script>
+
+<script
+    type="text/javascript"
+    src="https://app.stg.midtrans.com/snap/snap.js"
+    data-client-key="{{ config('midtrans.client') }}"
+></script>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
+use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -163,5 +164,47 @@ class ProductController extends Controller
             'icon' => 'success',
             'text' => 'Your data has been deleted.'
         ]);
+    }
+
+    public function restore($uuid)
+    {
+        Product::where('uuid', $uuid)->update([
+            'status' => 'active',
+            'deleted_at' => null
+        ]);
+        return response()->json([
+            'title' => 'Restored',
+            'icon' => 'success',
+            'text' => 'Your data has been restored.'
+        ]);
+    }
+
+    public function permanent($uuid)
+    {
+        try {
+            $product = Product::where('uuid', $uuid)->first();
+            if ($product->order()->exists()) {
+                throw new Exception('Cannot delete this product, because already used by many users');
+            }
+            if ($product->cart()->exists()) {
+                throw new Exception('Cannot delete this product, because already used by many users');
+            }
+            if ($product->wishlist()->exists()) {
+                throw new Exception('Cannot delete this product, because already used by many users');
+            }
+            $product->delete();
+            return response()->json([
+                'title' => 'Delete Product',
+                'icon' => 'success',
+                'text' => 'Successfully deleting this product.'
+            ]);
+        } catch (\Exception) {
+            return response()->json([
+                'title' => 'Delete Product',
+                'icon' => 'error',
+                'text' => 'Cannot delete this product, because already used by many users'
+            ]);
+            //throw $th;
+        }
     }
 }

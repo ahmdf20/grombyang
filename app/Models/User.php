@@ -4,8 +4,11 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Hashing\HashManager;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
@@ -49,5 +52,25 @@ class User extends Authenticatable
     public function email_verification(): HasOne
     {
         return $this->hasOne(EmailVerfication::class);
+    }
+
+    public function cart(): BelongsTo
+    {
+        return $this->belongsTo(Cart::class);
+    }
+
+    public function wishlist(): HasMany
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
+    public function order(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function transaction(): HasMany
+    {
+        return $this->hasMany(Transaction::class);
     }
 }

@@ -2,7 +2,7 @@
     <button class="mobile-close-btn mobile-nav-toggler"><i class="fas fa-times"></i></button>
     <div class="mobile-nav-brand">
         <a
-            href="index.html"
+            href="{{ route('catalog') }}"
             class="logo"
         >
             <img

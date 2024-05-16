@@ -27,7 +27,7 @@
                                         class="toggle btn btn-icon btn-primary d-md-none"
                                     ><em class="icon ni ni-plus"></em></a>
                                     <a
-                                        href="{{ route('product.add') }}"
+                                        href="{{ route('product.index') }}"
                                         class="btn btn-danger d-none d-md-inline-flex"
                                     ><span>Kembali</span></a>
                                 </li>
@@ -81,9 +81,20 @@
                                             </a>
                                             <div class="dropdown-menu">
                                                 <ul class="link-list-opt">
-                                                    <li><a href="#"><span>Detail</span></a></li>
-                                                    <li><a href="#"><span>Edit</span></a></li>
-                                                    <li><a href="#"></em><span>Hapus</span></a></li>
+                                                    <li>
+                                                        <a
+                                                            href="#"
+                                                            role="button"
+                                                            onclick="handleRestore('{{ $product->uuid }}')"
+                                                        ><span>Restore</span></a>
+                                                    </li>
+                                                    <li>
+                                                        <a
+                                                            href="#"
+                                                            role="button"
+                                                            onclick="handlePermanent('{{ $product->uuid }}')"
+                                                        ><span>Permanent Delete</span></a>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -99,4 +110,79 @@
     </div>
 </div>
 <!-- content @e -->
+
+<script>
+    function handleRestore(uuid)
+    {
+        Swal.fire({
+        title: "Are you sure?",
+        text: "Are you wan't restore this data?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#03fc0b",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, Restore!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: `{{ config('app.url') }}/product/restore/${uuid}`,
+                    method: 'POST',
+                    data: {
+                        _token: `{{ csrf_token() }}`,
+                        _method: `PUT`,
+                    },
+                    success: (response) => {
+                        Swal.fire({
+                            title: response.title,
+                            icon: response.icon,
+                            text: response.text,
+                        }).then((result1) => {
+                            if (result1.isConfirmed) {
+                                window.location.reload()
+                            }
+                        })
+                    },
+                    error: (error) => console.error(error)
+                })
+            }
+        });
+    }
+
+    function handlePermanent(uuid)
+    {
+        Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#03fc0b",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, Delete!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: `{{ config('app.url') }}/product/permanent/${uuid}`,
+                    method: 'POST',
+                    data: {
+                        _token: `{{ csrf_token() }}`,
+                        _method: `DELETE`,
+                    },
+                    success: (response) => {
+                        Swal.fire({
+                            title: response.title,
+                            icon: response.icon,
+                            text: response.text,
+                        }).then((result1) => {
+                            if (result1.isConfirmed) {
+                                window.location.reload()
+                            }
+                        })
+                    },
+                    error: (error) => console.error(error)
+                })
+            }
+        });
+    }
+</script>
+
 @endsection

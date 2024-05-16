@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CSController;
 use App\Http\Controllers\CustomerController;
@@ -9,19 +10,28 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\RajaOngkirController;
 use App\Http\Controllers\RestrictedProductController;
 use App\Http\Controllers\SellerController;
+use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
-
 
 Route::controller(FrontController::class)->group(function () {
     Route::get('/', 'index')->name('catalog');
-    Route::get('/my/profile', 'profile')->name('profile');
+    Route::get('/my/profile', 'profile')->name('profile')->middleware('auth');
+    Route::get('/front/product/detail/{uuid}', 'product_detail')->name('front.product-detail');
+    Route::get('/my/order', 'orders')->name('my-order');
+    Route::get('/my/order/detail/{uuid}', 'order')->name('my-order.detail');
 
     Route::put('/my/profile/update', 'update')->name('profile.update');
     Route::put('/my/profile/update-password', 'update_password')->name('profile.update-password');
+});
 
-    Route::get('/send-email', 'send_email')->name('send-email');
+Route::controller(RajaOngkirController::class)->group(function () {
+    Route::get('/raja-ongkir/province', 'province')->name('raja-ongkir.province');
+    Route::get('/raja-ongkir/city/{id}', 'city')->name('raja-ongkir.city');
+    Route::get('/raja-ongkir/shipping/{city}/{weight}/{shipping}', 'shipping')->name('raja-ongkir.shipping');
 });
 
 Route::controller(AuthController::class)->group(function () {
@@ -36,11 +46,11 @@ Route::controller(AuthController::class)->group(function () {
     Route::get('/register/email-verification/{id}/{token}/{method}', 'email_verification')->name('email-verification');
 });
 
-Route::controller(DashboardController::class)->group(function () {
+Route::controller(DashboardController::class)->middleware(['auth'])->group(function () {
     Route::get('/dashboard', 'index')->name('dashboard');
 });
 
-Route::controller(ProductController::class)->middleware('auth')->group(function () {
+Route::controller(ProductController::class)->middleware(['auth'])->group(function () {
     Route::get('/product', 'index')->name('product.index');
     Route::get('/product/bin', 'bin')->name('product.bin');
     Route::get('/product/restricted', 'product_restricted')->name('product.restricted');
@@ -54,9 +64,12 @@ Route::controller(ProductController::class)->middleware('auth')->group(function 
     Route::post('/product/store', 'store')->name('product.store');
 
     Route::delete('/product/delete/{uuid}', 'delete')->name('product.delete');
+
+    Route::put('/product/restore/{uuid}', 'restore')->name('product.restore');
+    Route::delete('/product/permanent/{uuid}', 'permanent')->name('product.permanent');
 });
 
-Route::controller(CategoryController::class)->group(function () {
+Route::controller(CategoryController::class)->middleware(['auth', 'authorization:admin,super-admin'])->group(function () {
     Route::get('/category', 'index')->name('category.index');
     Route::get('/category/add', 'add')->name('category.add');
     Route::get('/category/edit/{uuid}', 'edit')->name('category.edit');
@@ -68,11 +81,15 @@ Route::controller(CategoryController::class)->group(function () {
     Route::delete('/category/delete/{uuid}', 'delete')->name('category.delete');
 });
 
-Route::controller(OrderController::class)->middleware('authorization:seller')->group(function () {
+Route::controller(OrderController::class)->middleware(['auth', 'authorization:seller'])->group(function () {
     Route::get('/order', 'index')->name('order.index');
+
+    Route::post('/order/store/{product}', 'store')->name('order.store');
+
+    Route::post('/order/checkout/{transaction}', 'checkout')->name('order.checkout');
 });
 
-Route::controller(AdminController::class)->middleware('authorization:super-admin')->group(function () {
+Route::controller(AdminController::class)->middleware(['auth', 'authorization:super-admin'])->group(function () {
     Route::get('/admin', 'index')->name('admin.index');
     Route::get('/admin/add', 'add')->name('admin.add');
     Route::get('/admin/edit/{uuid}', 'edit')->name('admin.edit');
@@ -119,4 +136,25 @@ Route::controller(RestrictedProductController::class)->group(function () {
 
     Route::put('/restricted-product/block/{uuid}', 'block')->name('product-restricted.block');
     Route::put('/restricted-product/unblock/{uuid}', 'unblock')->name('product-restricted.unblock');
+});
+
+Route::controller(CartController::class)->middleware('auth')->middleware('authorization:seller,customer')->group(function () {
+    Route::get('/cart', 'index')->name('cart.index');
+
+    Route::post('/cart/store/{product}', 'store')->name('cart.store');
+
+    Route::delete('/cart/delete/{uuid}', 'delete')->name('cart.delete');
+});
+
+Route::controller(WishlistController::class)->middleware('auth')->middleware('authorization:seller,customer')->group(function () {
+    Route::get('/wishlist', 'index')->name('wishlist.index');
+
+    Route::delete('/wishlist/delete/{uuid}', 'delete')->name('wishlist.delete');
+
+    Route::post('/wishlist/store/{product}', 'store')->name('wishlist.store');
+});
+
+Route::controller(TransactionController::class)->middleware(['auth'])->group(function () {
+    Route::get('/transaction/detail/{uuid}')->name('transaction.detail');
+    Route::post('/transaction/checkout/{transaction}', 'checkout')->name('transaction.checkout');
 });

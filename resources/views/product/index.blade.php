@@ -20,12 +20,12 @@
                             data-content="pageMenu"
                         >
                             <ul class="nk-block-tools g-3">
-                                {{-- <li class="nk-block-tools-opt">
+                                <li class="nk-block-tools-opt">
                                     <a
                                         href="{{ route('product.bin') }}"
-                                class="btn btn-danger d-none d-md-inline-flex"
-                                ><em class="icon ni ni-trash"></em><span>Bin</span></a>
-                                </li> --}}
+                                        class="btn btn-danger d-none d-md-inline-flex"
+                                    ><em class="icon ni ni-trash"></em><span>Bin</span></a>
+                                </li>
                                 <li class="nk-block-tools-opt">
                                     <a
                                         href="{{ route('product.add') }}"

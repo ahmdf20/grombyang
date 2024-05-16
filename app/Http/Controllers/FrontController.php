@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Mail\Register;
+use App\Models\Order;
 use App\Models\Product;
+use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -27,6 +29,33 @@ class FrontController extends Controller
     {
         return view('catalog.account.profile', [
             'title' => 'Grombyang | My Profile'
+        ]);
+    }
+
+    public function product_detail($uuid): View
+    {
+        return view('catalog.product-detail', [
+            'title' => 'Grombyang | Detail Product',
+            'product' => Product::where('uuid', $uuid)->first(),
+        ]);
+    }
+
+    public function orders(): View
+    {
+        return view('catalog.orders', [
+            'title' => 'Grombyang | My Order',
+            'transactions' => Transaction::where([
+                ['user_id', auth()->user()->id],
+                ['deleted_at', null]
+            ])->get()->all()
+        ]);
+    }
+
+    public function order($uuid): View
+    {
+        return view('catalog.order-detail', [
+            'title' => 'Grombyang | My Order Detail',
+            'transaction' => Transaction::where('uuid', $uuid)->first()
         ]);
     }
 
@@ -73,11 +102,5 @@ class FrontController extends Controller
             'icon' => 'success',
             'text' => 'Password has been changed!'
         ]);
-    }
-
-    public function send_email()
-    {
-        Mail::to('ahmadfadilah202003@gmail.com')->send(new Register());
-        return "Berhasil";
     }
 }

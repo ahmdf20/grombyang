@@ -57,7 +57,7 @@
                                 <p class="nk-error-text">We are very sorry for inconvenience. It looks like you’re try
                                     to access a page that either has been deleted or never existed.</p>
                                 <a
-                                    href="{{ Redirect::back() }}"
+                                    href="{{ url()->previous() }}"
                                     class="btn btn-lg btn-primary mt-2"
                                 >Back To Home</a>
                             </div>
