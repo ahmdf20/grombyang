@@ -75,8 +75,8 @@ class ProductController extends Controller
             'upload' => 'required|mimes:png,jpg,jpeg|max:5242',
             'categories' => 'required',
             'description' => 'required',
-            'stock' => 'required',
-            'weight' => 'required'
+            'stock' => 'required|numeric',
+            'weight' => 'required|numeric'
         ]);
 
         $upload = $request->file('upload')->store('products');
@@ -117,8 +117,7 @@ class ProductController extends Controller
             'upload' => 'mimes:png,jpg,jpeg|max:5242',
             'categories' => 'required',
             'description' => 'required',
-            'stock' => 'required',
-            'weight' => 'required'
+            'weight' => 'required|numeric'
         ]);
         $product = Product::where('uuid', $uuid)->first();
         $upload = $product->image;
@@ -141,7 +140,6 @@ class ProductController extends Controller
             'price' => $request->price,
             'description' => $request->description,
             'image' => $upload,
-            'stock' => $request->stock,
             'weight' => $request->weight,
             'updated_at' => now()
         ]);
@@ -206,5 +204,21 @@ class ProductController extends Controller
             ]);
             //throw $th;
         }
+    }
+
+    public function stock(Request $request, $uuid)
+    {
+        $product = Product::where('uuid', $uuid)->first();
+        $product->stock += $request->stock;
+        $product->save();
+        // Product::where('uuid', $uuid)->update([
+        //     'stock' => $product->stock + $request->stock,
+        //     'updated_at' => now()
+        // ]);
+        return response()->json([
+            'title' => 'Re Stock Product',
+            'icon' => 'success',
+            'text' => 'Successfully re stock the product.'
+        ]);
     }
 }

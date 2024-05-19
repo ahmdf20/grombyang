@@ -29,14 +29,12 @@
 ============================================ -->
 <!-- Modernizer JS -->
 <script src="{{ asset('etrade') }}/assets/js/vendor/modernizr.min.js"></script>
-<!-- jQuery JS -->
-<script src="{{ asset('etrade') }}/assets/js/vendor/jquery.js"></script>
 <!-- Bootstrap JS -->
 <script src="{{ asset('etrade') }}/assets/js/vendor/popper.min.js"></script>
 <script src="{{ asset('etrade') }}/assets/js/vendor/bootstrap.min.js"></script>
 <script src="{{ asset('etrade') }}/assets/js/vendor/slick.min.js"></script>
 <script src="{{ asset('etrade') }}/assets/js/vendor/js.cookie.js"></script>
-<!-- <script src="{{ asset('etrade') }}/assets/js/vendor/jquery.style.switcher.js"></script> -->
+{{-- <!-- <script src="{{ asset('etrade') }}/assets/js/vendor/jquery.style.switcher.js"></script> --> --}}
 <script src="{{ asset('etrade') }}/assets/js/vendor/jquery-ui.min.js"></script>
 <script src="{{ asset('etrade') }}/assets/js/vendor/jquery.ui.touch-punch.min.js"></script>
 <script src="{{ asset('etrade') }}/assets/js/vendor/jquery.countdown.min.js"></script>

@@ -26,6 +26,8 @@ Route::controller(FrontController::class)->group(function () {
 
     Route::put('/my/profile/update', 'update')->name('profile.update');
     Route::put('/my/profile/update-password', 'update_password')->name('profile.update-password');
+
+    Route::put('/my/transaction/checkout/{transaction}', 'checkout')->name('transaction.checkout');
 });
 
 Route::controller(RajaOngkirController::class)->group(function () {
@@ -65,6 +67,8 @@ Route::controller(ProductController::class)->middleware(['auth'])->group(functio
 
     Route::delete('/product/delete/{uuid}', 'delete')->name('product.delete');
 
+    Route::put('/product/stock/{uuid}', 'stock')->name('product.stock');
+
     Route::put('/product/restore/{uuid}', 'restore')->name('product.restore');
     Route::delete('/product/permanent/{uuid}', 'permanent')->name('product.permanent');
 });
@@ -81,7 +85,7 @@ Route::controller(CategoryController::class)->middleware(['auth', 'authorization
     Route::delete('/category/delete/{uuid}', 'delete')->name('category.delete');
 });
 
-Route::controller(OrderController::class)->middleware(['auth', 'authorization:seller'])->group(function () {
+Route::controller(OrderController::class)->middleware(['auth', 'authorization:seller,customer'])->group(function () {
     Route::get('/order', 'index')->name('order.index');
 
     Route::post('/order/store/{product}', 'store')->name('order.store');
@@ -156,5 +160,5 @@ Route::controller(WishlistController::class)->middleware('auth')->middleware('au
 
 Route::controller(TransactionController::class)->middleware(['auth'])->group(function () {
     Route::get('/transaction/detail/{uuid}')->name('transaction.detail');
-    Route::post('/transaction/checkout/{transaction}', 'checkout')->name('transaction.checkout');
+    // Route::post('/transaction/checkout/{transaction}', 'checkout')->name('transaction.checkout');
 });

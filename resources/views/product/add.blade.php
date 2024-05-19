@@ -110,7 +110,7 @@
                                         <label
                                             class="form-label"
                                             for="weight"
-                                        >Weight</label>
+                                        >Weight <span>(Kilogram)</span></label>
                                         <div class="form-control-wrap">
                                             <div class="input-group mb-1">
                                                 <input
@@ -119,10 +119,10 @@
                                                     name="weight"
                                                     value="{{ old('weight') }}"
                                                 >
-                                                @error('weight')
-                                                <small class="text-danger">{{ $message }}</small>
-                                                @enderror
                                             </div>
+                                            @error('weight')
+                                            <small class="text-danger">{{ $message }}</small>
+                                            @enderror
                                         </div>
                                     </div>
                                 </div>
@@ -205,6 +205,9 @@
                                                 id="description"
                                                 class="summernote-minimal"
                                             >{{ old('description') }}</textarea>
+                                            @error('description')
+                                            <small class="text-danger">{{ $message }}</small>
+                                            @enderror
                                         </div>
                                     </div>
                                 </div><!-- .nk-block -->

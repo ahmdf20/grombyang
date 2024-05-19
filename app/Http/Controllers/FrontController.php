@@ -11,6 +11,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Kavist\RajaOngkir\Facades\RajaOngkir;
 
 class FrontController extends Controller
 {
@@ -101,6 +102,16 @@ class FrontController extends Controller
             'title' => 'Change Password',
             'icon' => 'success',
             'text' => 'Password has been changed!'
+        ]);
+    }
+
+    public function checkout(Request $request, Transaction $transaction)
+    {
+        $province = RajaOngkir::provinsi()->find($request->province);
+        $city = RajaOngkir::kota()->find($request->city);
+        return response()->json([
+            'province' => $province,
+            'city' => $city
         ]);
     }
 }

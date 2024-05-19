@@ -82,16 +82,26 @@
                                             </a>
                                             <div class="dropdown-menu">
                                                 <ul class="link-list-opt">
-                                                    <li><a
+                                                    <li>
+                                                        <a
+                                                            href="#"
+                                                            onclick="handleStock('{{ $product->uuid }}')"
+                                                        ><span>Re Stock</span></a>
+                                                    </li>
+                                                    <li>
+                                                        <a
                                                             href="{{ route('product.detail', ['uuid' => $product->uuid]) }}"><span>Detail</span></a>
                                                     </li>
-                                                    <li><a
+                                                    <li>
+                                                        <a
                                                             href="{{ route('product.edit', ['uuid' => $product->uuid]) }}"><span>Edit</span></a>
                                                     </li>
-                                                    <li><a
+                                                    <li>
+                                                        <a
                                                             href="#"
                                                             onclick="handleDelete('{{ $product->uuid }}')"
-                                                        ></em><span>Hapus</span></a></li>
+                                                        ></em><span>Hapus</span></a>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -149,6 +159,44 @@
             //     });
             // }
         });
+    }
+
+    async function handleStock(uuid)
+    {
+        const { value: stock } = await Swal.fire({
+        title: "Input Stock",
+        input: "number",
+        inputLabel: "Input Stock",
+        inputPlaceholder: "Enter number of stock",
+        inputValidator: (value) => {
+            if (!value) {
+            return "You need to write something!";
+            }
+        }
+        });
+        if (stock) {
+            $.ajax({
+                url: `{{ config('app.url') }}/product/stock/${uuid}`,
+                method: 'POST',
+                data: {
+                    _token: `{{ csrf_token() }}`,
+                    _method: 'PUT',
+                    stock: stock
+                },
+                success: (response) => {
+                    Swal.fire({
+                        title: response.title,
+                        icon: response.icon,
+                        text: response.text
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.reload()
+                        }
+                    })
+                },
+                error: (error) => console.error(error)
+            })
+        }
     }
 </script>
 

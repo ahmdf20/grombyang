@@ -85,27 +85,6 @@
                                     </div>
                                 </div>
 
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label
-                                            class="form-label"
-                                            for="stock"
-                                        >Stock</label>
-                                        <div class="form-control-wrap">
-                                            <input
-                                                type="number"
-                                                class="form-control"
-                                                id="stock"
-                                                name="stock"
-                                                value="{{ old('stock') ? old('stock') : $product->stock }}"
-                                            >
-                                            @error('stock')
-                                            <small class="text-danger">{{ $message }}</small>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label

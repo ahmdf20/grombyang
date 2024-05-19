@@ -231,7 +231,6 @@
             method: 'GET',
             success: (response) => {
                 let html = `<option value="pilih">-- Pilih --</pilih>`
-                console.log(response[0].costs)
                 response[0].costs.forEach((data, index) => {
                     html += `<option value="${data.cost[0].value}">${data.service} (${data.description})</option>`
                 })
@@ -296,38 +295,17 @@
             $('#cost_hidden').val(cost)
             $('#total_hidden').val(total)
         }
-        // let total = parseInt($('#total').val())
-        // let qty = parseInt($('#qty').val())
-        // let service = parseInt($('#service').val())
-        // let cost = parseInt($('#cost').val())
-        // if (service == 'pilih') {
-        //     let currency_total = Intl.NumberFormat('id-ID').format(total)
-        //     let currency_cost = Intl.NumberFormat('id-ID').format(cost)
-        //     $('#cost').text(`Rp. ${currency_cost}`)
-        //     $('#total').text(`Rp. ${currency_total}`)
-        //     $('#cost_hidden').val(cost)
-        //     $('#total_hidden').val(total)
-        // } else {
-        //     cost += service
-        //     total += cost
-        //     let currency_total = Intl.NumberFormat('id-ID').format(total)
-        //     let currency_cost = Intl.NumberFormat('id-ID').format(cost)
-        //     $('#cost').text(`Rp. ${currency_total}`)
-        //     $('#cost_hidden').val(cost)
-        //     $('#total_hidden').val(total)
-        //     $('#cost').text(`Rp. ${currency_cost}`)
-        // }
     }
 
     function handleSubmit(event, id)
     {
         event.preventDefault();
         $.ajax({
-            url: `{{ config('app.url') }}/transaction/checkout/${id}`,
-            method: `POST`,
+            url: `{{ config('app.url') }}/my/transaction/checkout/${id}`,
+            method: 'POST',
             data: {
                 _token: `{{ csrf_token() }}`,
-                _method: `POST`,
+                _method: 'PUT',
                 total: $('#total_hidden').val(),
                 province: $('#province').val(),
                 city: $('#city').val(),
